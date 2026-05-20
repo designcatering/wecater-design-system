@@ -1,26 +1,238 @@
 @import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+/* ─────────────────────────────────────────────
+   Cater Design System — Token Layer
+   Mapped 1:1 from Figma variables
+   Fonts: General Sans (title) · Inter (body)
+───────────────────────────────────────────── */
+
+@custom-variant dark (&:is(.dark *));
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  /* shadcn semantic → Tailwind utility bridge */
+  --color-background:               var(--background);
+  --color-foreground:               var(--foreground);
+  --color-card:                     var(--card);
+  --color-card-foreground:          var(--card-foreground);
+  --color-popover:                  var(--popover);
+  --color-popover-foreground:       var(--popover-foreground);
+  --color-primary:                  var(--primary);
+  --color-primary-foreground:       var(--primary-foreground);
+  --color-secondary:                var(--secondary);
+  --color-secondary-foreground:     var(--secondary-foreground);
+  --color-muted:                    var(--muted);
+  --color-muted-foreground:         var(--muted-foreground);
+  --color-accent:                   var(--accent);
+  --color-accent-foreground:        var(--accent-foreground);
+  --color-destructive:              var(--destructive);
+  --color-border:                   var(--border);
+  --color-input:                    var(--input);
+  --color-ring:                     var(--ring);
+  --color-sidebar:                  var(--sidebar);
+  --color-sidebar-foreground:       var(--sidebar-foreground);
+  --color-sidebar-primary:          var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent:           var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border:           var(--sidebar-border);
+  --color-sidebar-ring:             var(--sidebar-ring);
+
+  /* Cater brand palette → Tailwind utilities */
+  --color-mirage-900:               var(--cater-mirage-900);
+  --color-mirage-800:               var(--cater-mirage-800);
+  --color-mirage-700:               var(--cater-mirage-700);
+  --color-mirage-600:               var(--cater-mirage-600);
+  --color-mirage-400:               var(--cater-mirage-400);
+  --color-mirage-300:               var(--cater-mirage-300);
+  --color-mirage-100:               var(--cater-mirage-100);
+
+  --color-green-900:                var(--cater-green-900);
+  --color-green-800:                var(--cater-green-800);
+  --color-green-700:                var(--cater-green-700);
+  --color-green-50:                 var(--cater-green-50);
+
+  --color-salem-900:                var(--cater-salem-900);
+  --color-salem-700:                var(--cater-salem-700);
+  --color-salem-500:                var(--cater-salem-500);
+  --color-salem-100:                var(--cater-salem-100);
+  --color-salem-50:                 var(--cater-salem-50);
+
+  --color-orange-900:               var(--cater-orange-900);
+  --color-orange-700:               var(--cater-orange-700);
+  --color-orange-100:               var(--cater-orange-100);
+
+  --color-blush-900:                var(--cater-blush-900);
+  --color-blush-100:                var(--cater-blush-100);
+
+  --color-red:                      var(--cater-red);
+  --color-red-500:                  var(--cater-red-500);
+  --color-gossip:                   var(--cater-gossip);
+  --color-white-linen:              var(--cater-white-linen);
+
+  /* Radius */
+  --radius-sm:                      calc(var(--radius) * 0.5);
+  --radius-md:                      var(--radius);
+  --radius-lg:                      calc(var(--radius) * 2);
+  --radius-full:                    9999px;
+
+  /* Fonts */
+  --font-sans:                      var(--font-body);
+  --font-mono:                      var(--font-geist-mono);
+  --font-heading:                   var(--font-title);
+
+  /* Shadows */
+  --shadow-xs:                      var(--cater-shadow-xs);
+  --shadow-sm:                      var(--cater-shadow-sm);
+  --shadow-md:                      var(--cater-shadow-md);
+  --shadow-lg:                      var(--cater-shadow-lg);
+  --shadow-xl:                      var(--cater-shadow-xl);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+/* ─── Light mode ──────────────────────────── */
+:root {
+  /* ── shadcn semantic tokens (Cater mapped) ── */
+  --background:                     #ffffff;          /* White */
+  --foreground:                     #101828;          /* Mirage/900 */
+  --card:                           #ffffff;          /* White */
+  --card-foreground:                #101828;          /* Mirage/900 */
+  --popover:                        #ffffff;          /* White */
+  --popover-foreground:             #101828;          /* Mirage/900 */
+  --primary:                        #073d30;          /* Sherwood Green */
+  --primary-foreground:             #ccf8b9;          /* Gossip — primary button text */
+  --secondary:                      #f1f2f5;          /* Mirage/100 */
+  --secondary-foreground:           #101828;          /* Mirage/900 */
+  --muted:                          #f1f2f5;          /* Color/Surface/Default */
+  --muted-foreground:               #68707c;          /* Color/Text/Subtitle */
+  --accent:                         #d4f5ed;          /* Sherwood Green/50 */
+  --accent-foreground:              #073d30;          /* Sherwood Green */
+  --destructive:                    #c22d2c;          /* Brand Red E */
+  --border:                         #d9dde4;          /* Color/Border/Default */
+  --input:                          #d9dde4;          /* Color/Border/Default */
+  --ring:                           #39b16c;          /* Salem/500 */
+
+  /* Sidebar */
+  --sidebar:                        #fafbfc;          /* Color/Surface/Subtle */
+  --sidebar-foreground:             #101828;
+  --sidebar-primary:                #073d30;
+  --sidebar-primary-foreground:     #ffffff;
+  --sidebar-accent:                 #d4f5ed;
+  --sidebar-accent-foreground:      #073d30;
+  --sidebar-border:                 #d9dde4;
+  --sidebar-ring:                   #39b16c;
+
+  /* ── Cater brand palette ── */
+  --cater-mirage-900:               #101828;
+  --cater-mirage-800:               #29344a;
+  --cater-mirage-700:               #5a626f;
+  --cater-mirage-600:               #68707c;
+  --cater-mirage-400:               #b2b8c1;
+  --cater-mirage-300:               #d0d5dd;
+  --cater-mirage-100:               #f1f2f5;
+
+  --cater-green-900:                #063126;
+  --cater-green-800:                #073d30;
+  --cater-green-700:                #1e6151;          /* Sherwood Green/Chelsea Gem 700 — primary hover */
+  --cater-green-50:                 #d4f5ed;
+
+  --cater-salem-900:                #033f1c;
+  --cater-salem-700:                #067e39;
+  --cater-salem-500:                #39b16c;
+  --cater-salem-100:                #ceecda;
+  --cater-salem-50:                 #e6f5ed;
+
+  --cater-orange-900:               #653000;
+  --cater-orange-700:               #ca6100;
+  --cater-orange-100:               #ffe4cc;
+
+  --cater-blush-900:                #8e2e84;
+  --cater-blush-100:                #fee3fc;
+
+  --cater-red:                      #c22d2c;
+  --cater-red-500:                  #d15958;
+  --cater-gossip:                   #ccf8b9;
+  --cater-white-linen:              #f9f3e7;
+
+  /* ── Fonts ── */
+  --font-title:                     'General Sans', system-ui, sans-serif;
+  --font-body:                      'Inter', system-ui, sans-serif;
+
+  /* ── Radius ── */
+  --radius:                         0.5rem;           /* 8px = Radius/lg */
+
+  /* ── Shadows ── */
+  --cater-shadow-xs:                0 1px 2px 0 #1018280d;
+  --cater-shadow-sm:                0 1px 2px 0 #1018280f, 0 1px 3px 0 #1018281a;
+  --cater-shadow-md:                0 2px 4px -2px #1018280f, 0 4px 8px -2px #1018281a;
+  --cater-shadow-lg:                0 4px 6px -2px #10182808, 0 12px 16px -4px #10182814;
+  --cater-shadow-xl:                0 8px 8px -4px #10182808, 0 20px 24px -4px #10182814;
+  --cater-shadow-focus:             0 0 0 2px #ceecda; /* Input/Highlight/Focus */
+
+  /* ── Semantic text tokens ── */
+  --color-text-title:               #101828;
+  --color-text-body:                #29344a;
+  --color-text-subtitle:            #68707c;
+  --color-text-caption:             #b2b8c1;
+  --color-text-disabled:            #b2b8c1;
+
+  /* ── Semantic border tokens ── */
+  --color-border-default:           #d9dde4;
+  --color-border-darker:            #d0d5dd;
+  --color-border-disabled:          #f1f2f5;
+
+  /* ── Semantic surface tokens ── */
+  --color-surface-default:          #f1f2f5;
+  --color-surface-subtle:           #fafbfc;
+  --color-surface-disabled:         #f1f2f5;
+
+  /* ── Semantic state tokens ── */
+  --color-success-bg-subtle:        #baf1d6;
+  --color-success-bg-darker:        #378760;
+  --color-info-text-subtle:         #8e2e84;
+  --color-dialogue-outline:         #d9dde480;
+}
+
+/* ─── Dark mode ───────────────────────────── */
+.dark {
+  --background:                     #101828;          /* Mirage/900 */
+  --foreground:                     #ffffff;          /* White */
+  --card:                           #29344a;          /* Mirage/800 */
+  --card-foreground:                #ffffff;
+  --popover:                        #29344a;
+  --popover-foreground:             #ffffff;
+  --primary:                        #39b16c;          /* Salem/500 */
+  --primary-foreground:             #ccf8b9;          /* Gossip — keep consistent in dark mode */
+  --secondary:                      #29344a;          /* Mirage/800 */
+  --secondary-foreground:           #ffffff;
+  --muted:                          #29344a;
+  --muted-foreground:               #b2b8c1;          /* Mirage/400 */
+  --accent:                         #073d30;          /* Sherwood Green */
+  --accent-foreground:              #d4f5ed;
+  --destructive:                    #d15958;          /* Bright Red/500 */
+  --border:                         #29344a;
+  --input:                          #29344a;
+  --ring:                           #39b16c;
+  --sidebar:                        #29344a;
+  --sidebar-foreground:             #ffffff;
+  --sidebar-primary:                #39b16c;
+  --sidebar-primary-foreground:     #101828;
+  --sidebar-accent:                 #073d30;
+  --sidebar-accent-foreground:      #d4f5ed;
+  --sidebar-border:                 #5a626f;
+  --sidebar-ring:                   #39b16c;
+}
+
+/* ─── Base styles ─────────────────────────── */
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
   }
-}
-
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  body {
+    @apply bg-background text-foreground;
+    font-family: var(--font-body);
+  }
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-title);
+  }
 }

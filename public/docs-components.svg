@@ -1,0 +1,99 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 400" width="1000" height="400">
+  <defs>
+    <pattern id="comp-cross" x="0" y="0" width="32" height="32" patternUnits="userSpaceOnUse">
+      <line x1="16" y1="11" x2="16" y2="21" stroke="#032B20" stroke-width="1.5" opacity="0.6"/>
+      <line x1="11" y1="16" x2="21" y2="16" stroke="#032B20" stroke-width="1.5" opacity="0.6"/>
+    </pattern>
+  </defs>
+
+  <!-- Background — Cater brand dark green -->
+  <rect width="1000" height="400" fill="#073D30"/>
+
+  <!-- Cross texture -->
+  <rect width="1000" height="400" fill="url(#comp-cross)"/>
+
+  <!-- ─── HOME / HOUSE ICON ─── centered at x=220, y=200 -->
+  <!-- Roof triangle -->
+  <polygon points="130,215 220,115 310,215" fill="#1A7A5A"/>
+  <!-- Wall rectangle -->
+  <rect x="155" y="215" width="130" height="90" fill="#1A7A5A"/>
+  <!-- Door arch / smile cutout — white space to create negative shape -->
+  <rect x="175" y="250" width="90" height="55" fill="#073D30" rx="45"/>
+  <!-- Chimney / accent bar -->
+  <rect x="155" y="215" width="130" height="22" fill="#26A875"/>
+
+  <!-- Halftone cluster on house -->
+  <circle cx="215" cy="238" r="5.0" fill="#032B20" opacity="0.7"/>
+  <circle cx="230" cy="250" r="7.0" fill="#032B20" opacity="0.72"/>
+  <circle cx="246" cy="261" r="9.0" fill="#032B20" opacity="0.75"/>
+  <circle cx="230" cy="272" r="7.0" fill="#032B20" opacity="0.7"/>
+  <circle cx="214" cy="259" r="5.0" fill="#032B20" opacity="0.65"/>
+  <circle cx="198" cy="247" r="3.5" fill="#032B20" opacity="0.6"/>
+  <circle cx="262" cy="268" r="5.0" fill="#032B20" opacity="0.65"/>
+  <circle cx="278" cy="277" r="3.5" fill="#032B20" opacity="0.55"/>
+
+  <!-- ─── MAGNIFYING GLASS ICON ─── centered at x=500, y=200 -->
+  <!-- Outer ring -->
+  <circle cx="490" cy="188" r="90" fill="#1A7A5A"/>
+  <!-- Inner hole (background colour) -->
+  <circle cx="490" cy="188" r="60" fill="#073D30"/>
+  <!-- Re-fill inner area slightly for icon depth -->
+  <circle cx="490" cy="188" r="58" fill="#073D30"/>
+  <!-- Handle -->
+  <rect x="556" y="240" width="34" height="65" fill="#1A7A5A" rx="17" transform="rotate(40 556 240)"/>
+
+  <!-- ─── SHOPPING BASKET ICON ─── centered at x=780, y=200 -->
+  <!-- Basket body — trapezoid using polygon -->
+  <polygon points="680,200 700,310 860,310 880,200" fill="#1A7A5A"/>
+  <!-- Top handle — arc using path -->
+  <path d="M700,200 Q780,120 860,200" fill="none" stroke="#1A7A5A" stroke-width="28" stroke-linecap="round"/>
+  <!-- Lock hasp — rectangle on top of handle midpoint -->
+  <rect x="750" y="155" width="60" height="55" fill="#073D30" rx="8"/>
+  <circle cx="780" cy="182" r="15" fill="#073D30"/>
+  <!-- Vertical bars inside basket -->
+  <rect x="715" y="215" width="22" height="80" fill="#26A875" rx="4" opacity="0.9"/>
+  <rect x="752" y="215" width="22" height="80" fill="#26A875" rx="4" opacity="0.9"/>
+  <rect x="789" y="215" width="22" height="80" fill="#26A875" rx="4" opacity="0.9"/>
+  <rect x="826" y="215" width="22" height="80" fill="#26A875" rx="4" opacity="0.9"/>
+
+  <!-- Halftone cascade right-side -->
+  <!-- Col 1 -->
+  <circle cx="920" cy="85"  r="2.5" fill="#032B20" opacity="0.65"/>
+  <circle cx="920" cy="110" r="4.0" fill="#032B20" opacity="0.72"/>
+  <circle cx="920" cy="138" r="6.0" fill="#032B20" opacity="0.78"/>
+  <circle cx="920" cy="168" r="8.0" fill="#032B20" opacity="0.82"/>
+  <circle cx="920" cy="200" r="9.5" fill="#032B20" opacity="0.82"/>
+  <circle cx="920" cy="232" r="8.0" fill="#032B20" opacity="0.76"/>
+  <circle cx="920" cy="262" r="5.5" fill="#032B20" opacity="0.65"/>
+  <circle cx="920" cy="288" r="3.5" fill="#032B20" opacity="0.52"/>
+  <!-- Col 2 -->
+  <circle cx="952" cy="100" r="3.5" fill="#032B20" opacity="0.68"/>
+  <circle cx="952" cy="128" r="6.0" fill="#032B20" opacity="0.76"/>
+  <circle cx="952" cy="159" r="9.0" fill="#032B20" opacity="0.83"/>
+  <circle cx="952" cy="193" r="11.5" fill="#032B20" opacity="0.85"/>
+  <circle cx="952" cy="228" r="9.5" fill="#032B20" opacity="0.78"/>
+  <circle cx="952" cy="260" r="6.5" fill="#032B20" opacity="0.65"/>
+  <circle cx="952" cy="288" r="4.0" fill="#032B20" opacity="0.52"/>
+  <!-- Col 3 (edge) -->
+  <circle cx="984" cy="120" r="2.5" fill="#032B20" opacity="0.62"/>
+  <circle cx="984" cy="148" r="4.5" fill="#032B20" opacity="0.7"/>
+  <circle cx="984" cy="178" r="7.0" fill="#032B20" opacity="0.78"/>
+  <circle cx="984" cy="210" r="8.5" fill="#032B20" opacity="0.8"/>
+  <circle cx="984" cy="242" r="7.0" fill="#032B20" opacity="0.72"/>
+  <circle cx="984" cy="270" r="4.5" fill="#032B20" opacity="0.6"/>
+
+  <!-- Scattered bg dots -->
+  <circle cx="30"  cy="40"  r="3.0" fill="#032B20" opacity="0.55"/>
+  <circle cx="60"  cy="65"  r="2.0" fill="#032B20" opacity="0.5"/>
+  <circle cx="45"  cy="100" r="4.5" fill="#032B20" opacity="0.5"/>
+  <circle cx="25"  cy="140" r="3.5" fill="#032B20" opacity="0.48"/>
+  <circle cx="75"  cy="155" r="5.5" fill="#032B20" opacity="0.5"/>
+  <circle cx="40"  cy="185" r="3.0" fill="#032B20" opacity="0.45"/>
+  <circle cx="20"  cy="335" r="6.5" fill="#032B20" opacity="0.52"/>
+  <circle cx="55"  cy="360" r="4.5" fill="#032B20" opacity="0.48"/>
+  <circle cx="90"  cy="345" r="8.0" fill="#032B20" opacity="0.48"/>
+  <circle cx="130" cy="372" r="5.5" fill="#032B20" opacity="0.42"/>
+  <circle cx="460" cy="355" r="4.0" fill="#032B20" opacity="0.45"/>
+  <circle cx="500" cy="375" r="6.0" fill="#032B20" opacity="0.42"/>
+  <circle cx="540" cy="360" r="3.5" fill="#032B20" opacity="0.45"/>
+</svg>

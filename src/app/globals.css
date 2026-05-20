@@ -56,6 +56,7 @@
   --color-salem-900:                var(--cater-salem-900);
   --color-salem-700:                var(--cater-salem-700);
   --color-salem-500:                var(--cater-salem-500);
+  --color-salem-300:                var(--cater-salem-300);
   --color-salem-100:                var(--cater-salem-100);
   --color-salem-50:                 var(--cater-salem-50);
 
@@ -139,6 +140,7 @@
   --cater-salem-900:                #033f1c;
   --cater-salem-700:                #067e39;
   --cater-salem-500:                #39b16c;
+  --cater-salem-300:                #9cd8b5;          /* Input/Highlight/Focus border */
   --cater-salem-100:                #ceecda;
   --cater-salem-50:                 #e6f5ed;
 
@@ -191,6 +193,11 @@
   --color-success-bg-darker:        #378760;
   --color-info-text-subtle:         #8e2e84;
   --color-dialogue-outline:         #d9dde480;
+
+  /* ── Error state tokens ── */
+  --color-error-border:             #e89a9a;          /* Color/Error/Border */
+  --color-error-bg-subtle:          #ffdcdc;          /* Color/Error/Bg-subtle — error focus ring */
+  --color-error-text-subtle:        #6b0100;          /* Color/Error/Text-subtle — error hint text */
 }
 
 /* ─── Dark mode ───────────────────────────── */

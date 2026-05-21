@@ -9,7 +9,6 @@ const QUICK_LINKS = [
     id: 'colors',
     title: 'Colors',
     description: 'Color palettes, semantic tokens, and role-based usage guidelines.',
-    img: '/docs-colors.png',
     href: '?path=/story/tokens-colors--palette',
     accent: '#B85500',
   },
@@ -17,7 +16,6 @@ const QUICK_LINKS = [
     id: 'typography',
     title: 'Typography',
     description: 'Type scale, font families, weights, and Figma token mappings.',
-    img: '/docs-typography.png',
     href: '?path=/story/tokens-typography--scale',
     accent: '#6B0A72',
   },
@@ -25,7 +23,6 @@ const QUICK_LINKS = [
     id: 'foundations',
     title: 'Foundations',
     description: 'Spacing, border radius, and shadow tokens — the layout building blocks.',
-    img: '/docs-foundations.png',
     href: '?path=/story/tokens-spacing--scale',
     accent: '#0A4A10',
   },
@@ -33,7 +30,6 @@ const QUICK_LINKS = [
     id: 'components',
     title: 'Components',
     description: 'Buttons, inputs, and all UI primitives mapped from Figma.',
-    img: '/docs-components.png',
     href: '?path=/story/primitives-button--playground',
     accent: '#073D30',
   },
@@ -114,15 +110,6 @@ export const Welcome: Story = {
                          hover:border-[#9CD8B5] hover:shadow-[0_4px_20px_0_rgba(0,0,0,0.12)]
                          active:scale-[0.985] transition-all duration-200 no-underline"
             >
-              {/* Banner image */}
-              <div className="relative overflow-hidden" style={{ height: '144px' }}>
-                <img
-                  src={link.img}
-                  alt={link.title}
-                  className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-[1.04]"
-                />
-              </div>
-
               {/* Card body */}
               <div className="p-5">
                 {/* Colour dot + title */}

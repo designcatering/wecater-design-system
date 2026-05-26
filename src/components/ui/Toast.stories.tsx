@@ -2,23 +2,13 @@
  * Toast stories — Cater Design System
  *
  * Figma: https://www.figma.com/design/tK5SjqGRgeVr5w5tmxuLDa/Cater-Design-System?node-id=4810-11345
- *
- * Stories:
- *   Playground     → interactive controls for every prop
- *   Variants       → default · success · info · warning · error
- *   With Action    → inline action link per variant
- *   With Description → two-line toasts
- *   Dismiss Only   → no action, dismiss button
- *   Persistent     → duration=0, stays until dismissed
- *   Live Demo      → trigger real toasts from buttons (uses useToast + Toaster)
- *   Position       → all 6 anchor positions
- *   Kitchen Sink   → all variants stacked
  */
 
 import type { Meta, StoryObj } from "@storybook/nextjs-vite"
 import * as React from "react"
 import { Toast } from "@/components/ui/toast"
 import { Toaster } from "@/components/ui/toaster"
+import { Button } from "@/components/ui/button"
 import { useToast, toast as fireToast } from "@/hooks/use-toast"
 import type { ToasterPosition } from "@/components/ui/toaster"
 
@@ -32,9 +22,9 @@ const meta = {
     docs: {
       description: {
         component: `
-**Cater Toast** is the in-app notification primitive. It comes in two flavours:
+**Cater Toast** is the in-app notification primitive. Two flavours:
 
-- **Default (dark)** — the canonical Cater toast for transient confirmations (added to cart, saved, etc.). Dark \`#101828\` background with a Gossip-green action link.
+- **Default (dark)** — the canonical Cater toast. Dark \`#101828\` background, white text, Gossip-green action link. Used for transient confirmations (added to cart, saved, queued).
 - **Alert variants** — \`success\`, \`info\`, \`warning\`, \`error\` — coloured toasts for system feedback requiring attention.
 
 ### Anatomy
@@ -46,15 +36,18 @@ const meta = {
 ### Usage
 
 \`\`\`tsx
-// 1. Mount <Toaster /> once at your app root
+// 1. Mount <Toaster /> once at your layout root
+import { Toaster } from "@/components/ui/toaster"
 <Toaster position="bottom-right" />
 
-// 2. Fire toasts from anywhere
+// 2. Trigger toasts from anywhere
 import { toast } from "@/hooks/use-toast"
 
-toast({ message: "Your order was placed!", variant: "success" })
-toast.error("Payment failed — please retry.")
-toast({ message: "Saved", action: { label: "View", onClick: () => router.push("/orders") } })
+toast({ message: "Order added to cart", action: { label: "View", onClick: () => {} } })
+toast.success("Payment confirmed!")
+toast.error("Upload failed — please retry.")
+toast.warning("Session expires in 5 min.")
+toast.info("3 new menu items available.")
 \`\`\`
 
 ### Do / Don't
@@ -62,9 +55,9 @@ toast({ message: "Saved", action: { label: "View", onClick: () => router.push("/
 | ✅ Do | ❌ Don't |
 |---|---|
 | Keep messages under 2 lines | Write paragraphs in a toast |
-| Use for transient, non-critical feedback | Use for errors that need form-level detail |
-| Provide an action for navigable results | Stack more than 5 toasts at once |
-| Allow manual dismiss for important toasts | Auto-dismiss toasts with critical info |
+| Use default (dark) for cart/save confirmations | Use for errors that need form-level detail |
+| Provide an action when result is navigable | Stack more than 5 toasts at once |
+| Allow manual dismiss for critical alerts | Auto-dismiss toasts with error info |
         `,
       },
     },
@@ -73,20 +66,20 @@ toast({ message: "Saved", action: { label: "View", onClick: () => router.push("/
     variant: {
       control: "select",
       options: ["default", "success", "info", "warning", "error"],
-      description: "Visual style of the toast",
+      description: "Visual style",
       table: { defaultValue: { summary: "default" } },
     },
     message: {
       control: "text",
-      description: "Primary message content",
+      description: "Primary message (required)",
     },
     description: {
       control: "text",
-      description: "Optional secondary line of text",
+      description: "Optional secondary line",
     },
     showDismiss: {
       control: "boolean",
-      description: "Show the × dismiss button",
+      description: "Show × dismiss button",
       table: { defaultValue: { summary: "true" } },
     },
     hideIcon: {
@@ -102,8 +95,6 @@ toast({ message: "Saved", action: { label: "View", onClick: () => router.push("/
 export default meta
 type Story = StoryObj<typeof meta>
 
-// ─── Shared action ────────────────────────────────────────────────────────────
-
 const noop = () => {}
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -115,13 +106,12 @@ export const Playground: Story = {
   args: {
     variant: "default",
     message: "Your Basic Breakfast Bar has been added to cart",
-    description: undefined,
     showDismiss: true,
     hideIcon: false,
     action: { label: "View", onClick: noop },
   },
   render: (args) => (
-    <div className="w-[400px]">
+    <div className="w-[420px]">
       <Toast {...args} onDismiss={noop} />
     </div>
   ),
@@ -138,42 +128,46 @@ export const Variants: Story = {
     docs: {
       description: {
         story:
-          "Five visual variants: **default** (dark) is the primary Cater toast; **success / info / warning / error** are semantic alert toasts.",
+          "Five variants: **default** (dark) is the primary Cater toast. Alert variants communicate semantic status.",
       },
     },
   },
   render: () => (
-    <div className="flex w-[420px] flex-col gap-[12px]">
+    <div className="flex w-[440px] flex-col gap-[10px]">
+      {/* Default */}
       <Toast
         variant="default"
         message={
-          <>
-            Your{" "}
-            <strong className="font-semibold">Basic Breakfast Bar</strong> has been{" "}
+          <span>
+            Your <strong className="font-semibold">Basic Breakfast Bar</strong> has been{" "}
             <strong className="font-semibold">added to cart</strong>
-          </>
+          </span>
         }
         action={{ label: "View", onClick: noop }}
         onDismiss={noop}
       />
+      {/* Success */}
       <Toast
         variant="success"
         message="Order placed successfully!"
         action={{ label: "Track order", onClick: noop }}
         onDismiss={noop}
       />
+      {/* Info */}
       <Toast
         variant="info"
         message="New menu items are available for your event."
         action={{ label: "Explore", onClick: noop }}
         onDismiss={noop}
       />
+      {/* Warning */}
       <Toast
         variant="warning"
         message="Your cart expires in 10 minutes."
         action={{ label: "Extend", onClick: noop }}
         onDismiss={noop}
       />
+      {/* Error */}
       <Toast
         variant="error"
         message="Payment failed — please update your card."
@@ -195,12 +189,12 @@ export const WithDescription: Story = {
     docs: {
       description: {
         story:
-          "Use `description` for secondary context — keep it to one short sentence.",
+          "Add a secondary `description` line for extra context. Keep it to one short sentence.",
       },
     },
   },
   render: () => (
-    <div className="flex w-[420px] flex-col gap-[12px]">
+    <div className="flex w-[440px] flex-col gap-[10px]">
       <Toast
         variant="default"
         message="Basic Breakfast Bar added to cart"
@@ -236,12 +230,12 @@ export const WithAction: Story = {
     docs: {
       description: {
         story:
-          "The `action` prop adds a text button beside the message. Use a short verb phrase (View, Undo, Retry).",
+          "The `action` prop adds an inline text button. Use a short verb phrase — View, Undo, Retry, Track.",
       },
     },
   },
   render: () => (
-    <div className="flex w-[420px] flex-col gap-[12px]">
+    <div className="flex w-[440px] flex-col gap-[10px]">
       <Toast
         variant="default"
         message="Catering package saved as draft"
@@ -265,32 +259,25 @@ export const WithAction: Story = {
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// Without Action or Dismiss
+// Minimal (no action, no dismiss)
 // ─────────────────────────────────────────────────────────────────────────────
 
-export const MinimalToast: Story = {
-  name: "Minimal (No Action, No Dismiss)",
+export const Minimal: Story = {
+  name: "Minimal",
   args: { message: "" },
   parameters: {
     docs: {
       description: {
         story:
-          "Auto-dismissed toasts that require no user interaction — useful for low-priority confirmations.",
+          "Auto-dismissed toasts that need no user interaction — for low-priority confirmations.",
       },
     },
   },
   render: () => (
-    <div className="flex w-[420px] flex-col gap-[12px]">
-      <Toast
-        variant="default"
-        message="Changes saved"
-        showDismiss={false}
-      />
-      <Toast
-        variant="success"
-        message="Profile updated"
-        showDismiss={false}
-      />
+    <div className="flex w-[440px] flex-col gap-[10px]">
+      <Toast variant="default" message="Changes saved" showDismiss={false} />
+      <Toast variant="success" message="Profile updated successfully" showDismiss={false} />
+      <Toast variant="info"    message="Syncing your data…" showDismiss={false} />
     </div>
   ),
 }
@@ -306,12 +293,12 @@ export const WithoutIcon: Story = {
     docs: {
       description: {
         story:
-          "Set `hideIcon` to suppress the status icon on alert variants — useful in compact layouts.",
+          "Set `hideIcon` to remove the status icon from alert variants — useful in very compact layouts.",
       },
     },
   },
   render: () => (
-    <div className="flex w-[420px] flex-col gap-[12px]">
+    <div className="flex w-[440px] flex-col gap-[10px]">
       <Toast variant="success" message="Changes published" hideIcon onDismiss={noop} />
       <Toast variant="error"   message="Connection lost — retrying…" hideIcon onDismiss={noop} />
       <Toast variant="warning" message="Low disk space on attached media" hideIcon onDismiss={noop} />
@@ -320,7 +307,7 @@ export const WithoutIcon: Story = {
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// Rich Message
+// Rich Message (bold inline spans — per Figma)
 // ─────────────────────────────────────────────────────────────────────────────
 
 export const RichMessage: Story = {
@@ -330,19 +317,19 @@ export const RichMessage: Story = {
     docs: {
       description: {
         story:
-          "The `message` prop accepts ReactNode — use `<strong>` for product names or key terms as shown in Figma.",
+          "The `message` prop accepts ReactNode. Use `<strong>` to highlight product names or key terms — as shown in the Figma reference design.",
       },
     },
   },
   render: () => (
-    <div className="flex w-[420px] flex-col gap-[12px]">
+    <div className="flex w-[440px] flex-col gap-[10px]">
       <Toast
         variant="default"
         message={
-          <>
+          <span>
             Your <strong className="font-semibold">Basic Breakfast Bar</strong> has been{" "}
             <strong className="font-semibold">added to cart</strong>
-          </>
+          </span>
         }
         action={{ label: "View", onClick: noop }}
         onDismiss={noop}
@@ -350,9 +337,9 @@ export const RichMessage: Story = {
       <Toast
         variant="success"
         message={
-          <>
+          <span>
             <strong className="font-semibold">Order #2847</strong> was confirmed and is being prepared.
-          </>
+          </span>
         }
         action={{ label: "Track", onClick: noop }}
         onDismiss={noop}
@@ -362,114 +349,73 @@ export const RichMessage: Story = {
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// Kitchen Sink
+// Live Demo — fire real toasts
 // ─────────────────────────────────────────────────────────────────────────────
 
-export const KitchenSink: Story = {
-  name: "Kitchen Sink",
-  args: { message: "" },
-  parameters: {
-    layout: "padded",
-    docs: {
-      description: {
-        story: "Every variant with every prop combination in one view.",
-      },
-    },
-  },
-  render: () => (
-    <div className="flex w-[460px] flex-col gap-[10px] py-4">
-      {/* Default */}
-      <p className="text-[11px] font-semibold uppercase tracking-widest text-muted-foreground">Default</p>
-      <Toast variant="default" message="Basic Breakfast Bar added to cart" action={{ label: "View", onClick: noop }} onDismiss={noop} />
-      <Toast variant="default" message="Draft saved" showDismiss={false} />
-      <Toast variant="default" message="Changes saved" description="Last saved at 3:42 PM" action={{ label: "Undo", onClick: noop }} onDismiss={noop} />
-
-      {/* Success */}
-      <p className="mt-2 text-[11px] font-semibold uppercase tracking-widest text-muted-foreground">Success</p>
-      <Toast variant="success" message="Order placed successfully!" action={{ label: "Track order", onClick: noop }} onDismiss={noop} />
-      <Toast variant="success" message="Payment confirmed" description="Receipt sent to your email." onDismiss={noop} />
-
-      {/* Info */}
-      <p className="mt-2 text-[11px] font-semibold uppercase tracking-widest text-muted-foreground">Info</p>
-      <Toast variant="info" message="3 new menu items added to your region." action={{ label: "Explore", onClick: noop }} onDismiss={noop} />
-      <Toast variant="info" message="System maintenance" description="Scheduled for Sunday 2:00 – 4:00 AM." onDismiss={noop} />
-
-      {/* Warning */}
-      <p className="mt-2 text-[11px] font-semibold uppercase tracking-widest text-muted-foreground">Warning</p>
-      <Toast variant="warning" message="Cart expires in 10 minutes." action={{ label: "Extend", onClick: noop }} onDismiss={noop} />
-      <Toast variant="warning" message="Low storage" description="You're using 90% of your plan's storage." onDismiss={noop} />
-
-      {/* Error */}
-      <p className="mt-2 text-[11px] font-semibold uppercase tracking-widest text-muted-foreground">Error</p>
-      <Toast variant="error" message="Payment failed — please update your card." action={{ label: "Retry", onClick: noop }} onDismiss={noop} />
-      <Toast variant="error" message="Upload failed" description="File exceeds the 10 MB limit." onDismiss={noop} />
-    </div>
-  ),
-}
-
-// ─────────────────────────────────────────────────────────────────────────────
-// Live Demo — triggers real toasts with Toaster
-// ─────────────────────────────────────────────────────────────────────────────
-
-function LiveDemoInner({ position }: { position: ToasterPosition }) {
-  const triggers = [
+function LiveDemoPanel({ position }: { position: ToasterPosition }) {
+  const TRIGGERS = [
     {
       label: "Default",
-      color: "bg-[#101828] text-white hover:bg-[#1d2939]",
-      fn: () =>
+      variant: "outline" as const,
+      fire: () =>
         fireToast({
           message: (
-            <>
+            <span>
               Your <strong className="font-semibold">Basic Breakfast Bar</strong> has been{" "}
               <strong className="font-semibold">added to cart</strong>
-            </>
+            </span>
           ),
           action: { label: "View", onClick: noop },
         }),
     },
     {
       label: "Success",
-      color: "bg-[#067e39] text-white hover:bg-[#033f1c]",
-      fn: () => fireToast.success("Order placed — thank you!", { action: { label: "Track", onClick: noop } }),
+      variant: "default" as const,
+      fire: () =>
+        fireToast.success("Order placed — thank you!", {
+          action: { label: "Track", onClick: noop },
+        }),
     },
     {
       label: "Info",
-      color: "bg-[#7c3aed] text-white hover:bg-[#4a0066]",
-      fn: () => fireToast.info("New menu items are available in your area."),
+      variant: "secondary" as const,
+      fire: () =>
+        fireToast.info("New menu items are available in your area."),
     },
     {
       label: "Warning",
-      color: "bg-[#d97706] text-white hover:bg-[#92400e]",
-      fn: () => fireToast.warning("Your cart expires in 10 minutes.", { action: { label: "Extend", onClick: noop } }),
+      variant: "outline" as const,
+      fire: () =>
+        fireToast.warning("Your cart expires in 10 minutes.", {
+          action: { label: "Extend", onClick: noop },
+        }),
     },
     {
       label: "Error",
-      color: "bg-[#c22d2c] text-white hover:bg-[#6b0100]",
-      fn: () => fireToast.error("Payment failed — please retry.", { action: { label: "Retry", onClick: noop } }),
+      variant: "destructive" as const,
+      fire: () =>
+        fireToast.error("Payment failed — please retry.", {
+          action: { label: "Retry", onClick: noop },
+        }),
     },
-  ]
+  ] as const
 
   return (
-    <div className="relative flex min-h-[260px] w-full flex-col items-center justify-center gap-[32px] rounded-[12px] bg-[#fafbfc] p-[40px]">
-      {/* Position label */}
-      <div className="absolute top-[12px] right-[12px] rounded-full bg-[#101828] px-[10px] py-[4px] text-[11px] font-medium text-white">
+    <div className="relative flex min-h-[240px] w-full flex-col items-center justify-center gap-[28px] rounded-[12px] bg-[#fafbfc] border border-[#e4e7ec] p-[32px]">
+      {/* Position badge */}
+      <span className="absolute top-[10px] right-[10px] rounded-full bg-[#101828] px-[10px] py-[3px] text-[11px] font-medium tracking-wide text-white">
         {position}
-      </div>
+      </span>
 
-      <p className="text-[14px] text-muted-foreground">
-        Click a button to fire a live toast ↗
+      <p className="text-[13px] text-muted-foreground text-center">
+        Click a button to fire a live toast →
       </p>
 
       <div className="flex flex-wrap justify-center gap-[8px]">
-        {triggers.map(({ label, color, fn }) => (
-          <button
-            key={label}
-            type="button"
-            onClick={fn}
-            className={`cursor-pointer rounded-full px-[16px] py-[8px] text-[13px] font-semibold transition-colors duration-150 ${color}`}
-          >
+        {TRIGGERS.map(({ label, variant, fire }) => (
+          <Button key={label} variant={variant} size="sm" onClick={fire}>
             {label}
-          </button>
+          </Button>
         ))}
       </div>
 
@@ -486,15 +432,15 @@ export const LiveDemo: Story = {
     docs: {
       description: {
         story:
-          "Fire real toasts using `toast()` / `toast.success()` etc. The `<Toaster />` component is mounted and renders active toasts in the corner. Auto-dismisses after 4 s.",
+          "Fire real toasts using the imperative `toast()` API. The `<Toaster />` is mounted inside this demo and renders live notifications. Toasts auto-dismiss after 4 s.",
       },
     },
   },
-  render: () => <LiveDemoInner position="bottom-right" />,
+  render: () => <LiveDemoPanel position="bottom-right" />,
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// Position
+// Positions
 // ─────────────────────────────────────────────────────────────────────────────
 
 const POSITIONS: ToasterPosition[] = [
@@ -502,7 +448,7 @@ const POSITIONS: ToasterPosition[] = [
   "bottom-left", "bottom-center", "bottom-right",
 ]
 
-export const Position: Story = {
+export const Positions: Story = {
   name: "Positions",
   args: { message: "" },
   parameters: {
@@ -510,63 +456,58 @@ export const Position: Story = {
     docs: {
       description: {
         story:
-          "The `<Toaster position>` prop accepts 6 anchors. Click each tile to see how toasts appear in that corner/edge.",
+          "The `<Toaster position>` prop accepts 6 anchors. Click each tile to see toasts appear in that corner or edge.",
       },
     },
   },
   render: () => (
-    <div className="grid grid-cols-3 gap-[12px]">
+    <div className="grid grid-cols-3 gap-[12px] w-full">
       {POSITIONS.map((pos) => (
-        <LiveDemoInner key={pos} position={pos} />
+        <LiveDemoPanel key={pos} position={pos} />
       ))}
     </div>
   ),
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// Persistent Toast
+// Persistent
 // ─────────────────────────────────────────────────────────────────────────────
 
 export const Persistent: Story = {
-  name: "Persistent (No Auto-Dismiss)",
+  name: "Persistent",
   args: { message: "" },
   parameters: {
     docs: {
       description: {
         story:
-          "Pass `duration: 0` to keep a toast on screen indefinitely. The user must explicitly dismiss it. Use sparingly — only for critical, actionable errors.",
+          "Pass `duration: 0` to keep a toast on screen until the user explicitly dismisses it. Use sparingly — only for critical, actionable errors.",
       },
     },
   },
   render: () => {
     // eslint-disable-next-line react-hooks/rules-of-hooks
     const [visible, setVisible] = React.useState(true)
-
-    if (!visible) {
-      return (
-        <div className="flex w-[420px] flex-col items-center gap-[16px]">
-          <p className="text-[14px] text-muted-foreground">Toast dismissed.</p>
-          <button
-            type="button"
-            onClick={() => setVisible(true)}
-            className="cursor-pointer rounded-full bg-[#101828] px-[16px] py-[8px] text-[13px] font-semibold text-white"
-          >
-            Restore
-          </button>
-        </div>
-      )
-    }
-
     return (
-      <div className="w-[420px]">
-        <Toast
-          variant="error"
-          message="Action required: your subscription has expired."
-          description="Renew to continue accessing WeCaterAI."
-          action={{ label: "Renew now", onClick: noop }}
-          showDismiss
-          onDismiss={() => setVisible(false)}
-        />
+      <div className="flex w-[440px] flex-col items-start gap-[16px]">
+        {visible ? (
+          <Toast
+            variant="error"
+            message="Action required: your subscription has expired."
+            description="Renew to continue accessing WeCaterAI."
+            action={{ label: "Renew now", onClick: noop }}
+            showDismiss
+            onDismiss={() => setVisible(false)}
+          />
+        ) : (
+          <p className="text-[14px] text-muted-foreground">Toast dismissed.</p>
+        )}
+        <Button
+          variant={visible ? "outline" : "default"}
+          size="sm"
+          onClick={() => setVisible(true)}
+        >
+          {visible ? "Dismiss the toast above" : "Restore toast"}
+        </Button>
       </div>
     )
   },
@@ -584,52 +525,39 @@ export const StackedQueue: Story = {
     docs: {
       description: {
         story:
-          "Up to 5 toasts stack in the Toaster. Oldest toast is at the bottom; newest sits on top. Click 'Add toast' multiple times to see the queue fill.",
+          "Up to 5 toasts stack in the Toaster. Newest sits on top; oldest auto-dismisses first. Click **Add toast** repeatedly to see the queue fill.",
       },
     },
   },
   render: () => {
     // eslint-disable-next-line react-hooks/rules-of-hooks
     const { toasts, dismiss, dismissAll } = useToast()
-    const variants = ["default", "success", "info", "warning", "error"] as const
-    const messages = [
-      "Basic Breakfast Bar added to cart",
-      "Order placed successfully!",
-      "New items available in your region.",
-      "Cart expires in 10 minutes.",
-      "Payment failed — please retry.",
-    ]
-    // eslint-disable-next-line react-hooks/rules-of-hooks
     const counter = React.useRef(0)
+    const CYCLE = [
+      { message: "Basic Breakfast Bar added to cart", variant: "default" },
+      { message: "Order placed successfully!", variant: "success" },
+      { message: "New items available in your region.", variant: "info" },
+      { message: "Cart expires in 10 minutes.", variant: "warning" },
+      { message: "Payment failed — please retry.", variant: "error" },
+    ] as const
 
     const addToast = () => {
-      const i = counter.current % 5
+      const item = CYCLE[counter.current % 5]
       counter.current++
-      fireToast({ message: messages[i], variant: variants[i], duration: 0, showDismiss: true })
+      fireToast({ message: item.message, variant: item.variant, duration: 0 })
     }
 
     return (
       <div className="flex w-[460px] flex-col gap-[20px]">
         <div className="flex gap-[8px]">
-          <button
-            type="button"
-            onClick={addToast}
-            className="cursor-pointer rounded-full bg-[#101828] px-[16px] py-[8px] text-[13px] font-semibold text-white hover:bg-[#1d2939]"
-          >
-            + Add toast
-          </button>
-          <button
-            type="button"
-            onClick={dismissAll}
-            className="cursor-pointer rounded-full border border-[#d9dde4] px-[16px] py-[8px] text-[13px] font-semibold text-[#68707c] hover:bg-[#f1f2f5]"
-          >
-            Clear all
-          </button>
+          <Button variant="default" size="sm" onClick={addToast}>+ Add toast</Button>
+          <Button variant="outline" size="sm" onClick={dismissAll}>Clear all</Button>
         </div>
-
         <div className="flex flex-col gap-[8px]">
           {toasts.length === 0 && (
-            <p className="text-[14px] text-muted-foreground">No active toasts — click "Add toast" above.</p>
+            <p className="text-[14px] text-muted-foreground">
+              No active toasts — click "Add toast" above.
+            </p>
           )}
           {toasts.map((t) => (
             <Toast
@@ -644,6 +572,62 @@ export const StackedQueue: Story = {
       </div>
     )
   },
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Kitchen Sink
+// ─────────────────────────────────────────────────────────────────────────────
+
+export const KitchenSink: Story = {
+  name: "Kitchen Sink",
+  args: { message: "" },
+  parameters: {
+    layout: "padded",
+    docs: {
+      description: {
+        story: "Every variant × prop combination in one view.",
+      },
+    },
+  },
+  render: () => (
+    <div className="flex w-[460px] flex-col gap-[8px] py-2">
+      {(
+        [
+          ["Default",  "default"],
+          ["Success",  "success"],
+          ["Info",     "info"],
+          ["Warning",  "warning"],
+          ["Error",    "error"],
+        ] as const
+      ).map(([label, variant]) => (
+        <React.Fragment key={variant}>
+          <p className="mt-4 first:mt-0 text-[11px] font-semibold uppercase tracking-widest text-muted-foreground">
+            {label}
+          </p>
+          {/* With action */}
+          <Toast
+            variant={variant}
+            message={`${label} toast with action`}
+            action={{ label: "Action", onClick: noop }}
+            onDismiss={noop}
+          />
+          {/* With description */}
+          <Toast
+            variant={variant}
+            message={`${label} toast with description`}
+            description="Additional context goes here."
+            onDismiss={noop}
+          />
+          {/* Minimal */}
+          <Toast
+            variant={variant}
+            message={`${label} toast — minimal`}
+            showDismiss={false}
+          />
+        </React.Fragment>
+      ))}
+    </div>
+  ),
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -663,8 +647,8 @@ export const APIReference: Story = {
 | Prop | Type | Default | Description |
 |---|---|---|---|
 | \`variant\` | \`"default" \\| "success" \\| "info" \\| "warning" \\| "error"\` | \`"default"\` | Visual style |
-| \`message\` | \`ReactNode\` | — | Primary text (required) |
-| \`description\` | \`ReactNode\` | — | Secondary line of text |
+| \`message\` | \`ReactNode\` | — | Primary text **(required)** |
+| \`description\` | \`ReactNode\` | — | Secondary line |
 | \`action\` | \`{ label: string; onClick: () => void }\` | — | Inline action button |
 | \`showDismiss\` | \`boolean\` | \`true\` | Show × dismiss button |
 | \`onDismiss\` | \`() => void\` | — | Called when × is clicked |
@@ -684,14 +668,14 @@ toast({
   description: "Receipt sent to your email.",
   action:      { label: "Track", onClick: () => {} },
   showDismiss: true,
-  duration:    4000,   // ms — 0 = persistent
+  duration:    4000,   // ms — pass 0 for persistent
 })
 
 // Shorthand helpers
 toast.success("Saved!")
 toast.error("Something went wrong.")
-toast.warning("Cart expires in 5 min.")
-toast.info("New items added to your region.")
+toast.warning("Cart expires soon.")
+toast.info("New items added.")
 \`\`\`
 
 ---
@@ -701,7 +685,7 @@ toast.info("New items added to your region.")
 | Prop | Type | Default | Description |
 |---|---|---|---|
 | \`position\` | \`"top-left" \\| "top-center" \\| "top-right" \\| "bottom-left" \\| "bottom-center" \\| "bottom-right"\` | \`"bottom-right"\` | Screen anchor |
-| \`toastWidth\` | \`number \\| string\` | \`400\` | Max width of each toast pill |
+| \`toastWidth\` | \`number \\| string\` | \`400\` | Max width of each toast |
 
 ---
 
@@ -710,28 +694,28 @@ toast.info("New items added to your region.")
 \`\`\`ts
 const { toasts, toast, dismiss, dismissAll } = useToast()
 \`\`\`
-
-| Return | Type | Description |
-|---|---|---|
-| \`toasts\` | \`ToastItem[]\` | Active toast list |
-| \`toast\` | \`(opts) => { id, dismiss }\` | Fire a new toast |
-| \`dismiss(id)\` | \`(string) => void\` | Remove a toast by id |
-| \`dismissAll()\` | \`() => void\` | Remove all active toasts |
         `,
       },
     },
   },
   render: () => (
-    <div className="flex w-[420px] flex-col gap-[12px]">
+    <div className="flex w-[440px] flex-col gap-[10px]">
       <Toast
         variant="default"
         message={
-          <>Your <strong className="font-semibold">Basic Breakfast Bar</strong> has been <strong className="font-semibold">added to cart</strong></>
+          <span>
+            Your <strong className="font-semibold">Basic Breakfast Bar</strong> has been{" "}
+            <strong className="font-semibold">added to cart</strong>
+          </span>
         }
         action={{ label: "View", onClick: noop }}
         onDismiss={noop}
       />
-      <Toast variant="success" message="Reference card — see docs tab for full API." onDismiss={noop} />
+      <Toast
+        variant="success"
+        message="See the Docs tab above for the full API reference."
+        onDismiss={noop}
+      />
     </div>
   ),
 }

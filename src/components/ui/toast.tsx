@@ -4,29 +4,27 @@
  * Figma: https://www.figma.com/design/tK5SjqGRgeVr5w5tmxuLDa/Cater-Design-System?node-id=4810-11345
  *
  * ─── Variants ─────────────────────────────────────────────────────────────────
- * default  →  dark (#101828 Mirage/900) bg · white text · Gossip action link
- * success  →  Salem/50 bg · Salem/900 text · green icon
+ * default  →  dark (#101828 Mirage/900) bg · white text · Gossip-green action
+ * success  →  Salem/50 (#e6f5ed) bg · Salem/900 text · green icon
  * info     →  purple-50 bg · purple-900 text · info icon
  * warning  →  amber-50 bg · amber-900 text · warning icon
- * error    →  Error/Bg-subtle bg · Error/Text-subtle text · error icon
+ * error    →  Error/Bg-subtle (#ffdcdc) bg · Error/Text-subtle text · error icon
  *
  * ─── Anatomy ──────────────────────────────────────────────────────────────────
- * [icon?] [message] [action?] [dismiss?]
+ * [icon?]  [message · description?]  [action?]  [×]
  *
  * ─── Figma tokens (default / dark variant) ────────────────────────────────────
- * bg       #101828  (--cater-mirage-900)
- * text     #ffffff
- * action   #ccf8b9  (--cater-gossip)
- * radius   10px
- * padding  12px
- * gap      ~21px (message → action → dismiss)
- * shadow   0px 4px 4px rgba(16,24,40,.10), 0px 2px 2px rgba(16,24,40,.06)
+ * bg        #101828
+ * text      #ffffff
+ * action    #ccf8b9  (Gossip)
+ * radius    10px
+ * padding   12px
+ * shadow    0 4px 4px rgba(16,24,40,.10), 0 2px 2px rgba(16,24,40,.06)
  */
 
 "use client"
 
 import * as React from "react"
-import { cva, type VariantProps } from "class-variance-authority"
 import {
   RiCheckboxCircleLine,
   RiInformationLine,
@@ -42,86 +40,82 @@ export type ToastVariant = "default" | "success" | "info" | "warning" | "error"
 
 export interface ToastProps extends React.HTMLAttributes<HTMLDivElement> {
   variant?: ToastVariant
-
-  /** Primary message — supports string or rich ReactNode */
   message: React.ReactNode
-
-  /** Optional description line beneath message */
   description?: React.ReactNode
-
-  /** Inline action link */
-  action?: {
-    label: string
-    onClick: () => void
-  }
-
-  /** Show the × dismiss button */
+  action?: { label: string; onClick: () => void }
   showDismiss?: boolean
   onDismiss?: () => void
-
-  /** Hide the status icon (alert variants only) */
   hideIcon?: boolean
 }
 
-// ─── CVA ──────────────────────────────────────────────────────────────────────
+// ─── Per-variant design tokens ────────────────────────────────────────────────
+// Inline styles are used for backgrounds/borders so Tailwind scanning order
+// can never hide these values.
 
-const toastVariants = cva(
-  // ── Base ──
-  [
-    "relative flex w-full items-start gap-[12px] rounded-[10px] p-[12px]",
-    "shadow-[0px_4px_4px_rgba(16,24,40,0.10),0px_2px_2px_rgba(16,24,40,0.06)]",
-    "transition-all duration-300 ease-in-out",
-    "font-[family-name:var(--font-body)] text-[14px] leading-[1.5]",
-  ],
+const VARIANT_CONFIG: Record<
+  ToastVariant,
   {
-    variants: {
-      variant: {
-        /** Figma: dark "Toast" — Mirage/900 bg */
-        default: [
-          "bg-[#101828] text-white",
-        ],
-        /** Salem/50 tint — green success */
-        success: [
-          "bg-[--cater-salem-50] text-[--cater-salem-900]",
-          "border border-[--cater-salem-300]",
-        ],
-        /** Soft purple — informational */
-        info: [
-          "bg-[#f5eef9] text-[#4a0066]",
-          "border border-[#d4a8e8]",
-        ],
-        /** Amber/50 — warning */
-        warning: [
-          "bg-[#fffbeb] text-[#78350f]",
-          "border border-[#fcd34d]",
-        ],
-        /** Error/Bg-subtle — destructive */
-        error: [
-          "bg-[--color-error-bg-subtle] text-[--color-error-text-subtle]",
-          "border border-[--color-error-border]",
-        ],
-      },
-    },
-    defaultVariants: {
-      variant: "default",
-    },
+    containerStyle: React.CSSProperties
+    textClass: string
+    actionClass: string
+    iconClass: string
+    Icon: React.ElementType | null
   }
-)
-
-// ─── Icon map ─────────────────────────────────────────────────────────────────
-
-const ICON_MAP: Record<Exclude<ToastVariant, "default">, React.ElementType> = {
-  success: RiCheckboxCircleLine,
-  info:    RiInformationLine,
-  warning: RiAlertLine,
-  error:   RiErrorWarningLine,
-}
-
-const ICON_COLOR: Record<Exclude<ToastVariant, "default">, string> = {
-  success: "text-[--cater-salem-700]",
-  info:    "text-[#7c3aed]",
-  warning: "text-[#d97706]",
-  error:   "text-[--color-error-text-subtle]",
+> = {
+  default: {
+    containerStyle: {
+      backgroundColor: "#101828",
+      boxShadow: "0 4px 4px rgba(16,24,40,.10), 0 2px 2px rgba(16,24,40,.06)",
+    },
+    textClass:   "text-white",
+    actionClass: "text-[#ccf8b9]",   // Gossip
+    iconClass:   "text-white",
+    Icon: null,
+  },
+  success: {
+    containerStyle: {
+      backgroundColor: "#e6f5ed",    // cater-salem-50
+      border: "1px solid #9cd8b5",   // cater-salem-300
+      boxShadow: "0 1px 2px rgba(16,24,40,.06)",
+    },
+    textClass:   "text-[#033f1c]",   // cater-salem-900
+    actionClass: "text-[#067e39] underline underline-offset-2",
+    iconClass:   "text-[#067e39]",   // cater-salem-700
+    Icon: RiCheckboxCircleLine,
+  },
+  info: {
+    containerStyle: {
+      backgroundColor: "#f3e8ff",
+      border: "1px solid #c084fc",
+      boxShadow: "0 1px 2px rgba(16,24,40,.06)",
+    },
+    textClass:   "text-[#4a0080]",
+    actionClass: "text-[#7c3aed] underline underline-offset-2",
+    iconClass:   "text-[#7c3aed]",
+    Icon: RiInformationLine,
+  },
+  warning: {
+    containerStyle: {
+      backgroundColor: "#fffbeb",
+      border: "1px solid #fcd34d",
+      boxShadow: "0 1px 2px rgba(16,24,40,.06)",
+    },
+    textClass:   "text-[#78350f]",
+    actionClass: "text-[#d97706] underline underline-offset-2",
+    iconClass:   "text-[#d97706]",
+    Icon: RiAlertLine,
+  },
+  error: {
+    containerStyle: {
+      backgroundColor: "#ffdcdc",    // color-error-bg-subtle
+      border: "1px solid #e89a9a",   // color-error-border
+      boxShadow: "0 1px 2px rgba(16,24,40,.06)",
+    },
+    textClass:   "text-[#6b0100]",   // color-error-text-subtle
+    actionClass: "text-[#6b0100] underline underline-offset-2",
+    iconClass:   "text-[#c22d2c]",
+    Icon: RiErrorWarningLine,
+  },
 }
 
 // ─── Component ────────────────────────────────────────────────────────────────
@@ -137,12 +131,13 @@ const Toast = React.forwardRef<HTMLDivElement, ToastProps>(
       onDismiss,
       hideIcon = false,
       className,
+      style,
       ...props
     },
     ref
   ) => {
-    const Icon = variant !== "default" ? ICON_MAP[variant] : null
-    const iconColor = variant !== "default" ? ICON_COLOR[variant] : null
+    const cfg = VARIANT_CONFIG[variant]
+    const { Icon } = cfg
 
     return (
       <div
@@ -150,40 +145,33 @@ const Toast = React.forwardRef<HTMLDivElement, ToastProps>(
         role="status"
         aria-live="polite"
         aria-atomic="true"
-        className={cn(toastVariants({ variant }), className)}
+        className={cn(
+          // ── layout ──
+          "relative flex w-full items-center gap-[12px] rounded-[10px] p-[12px]",
+          // ── typography base ──
+          "font-[family-name:var(--font-body)] text-[14px] leading-[1.5]",
+          className
+        )}
+        style={{ ...cfg.containerStyle, ...style }}
         {...props}
       >
-        {/* Status icon — alert variants only */}
+        {/* Status icon (alert variants only) */}
         {Icon && !hideIcon && (
           <Icon
-            className={cn("mt-[1px] size-[20px] shrink-0", iconColor)}
+            className={cn("size-[20px] shrink-0 self-start mt-[1px]", cfg.iconClass)}
             aria-hidden="true"
           />
         )}
 
-        {/* Content */}
-        <div className="flex min-w-0 flex-1 flex-col gap-[2px]">
-          <p
-            className={cn(
-              "font-normal",
-              variant === "default" ? "text-white" : ""
-            )}
-          >
-            {message}
-          </p>
+        {/* Message + description */}
+        <div className={cn("flex min-w-0 flex-1 flex-col gap-[2px]", cfg.textClass)}>
+          <div className="font-normal break-words">{message}</div>
           {description && (
-            <p
-              className={cn(
-                "text-[13px] opacity-80",
-                variant === "default" ? "text-white/80" : ""
-              )}
-            >
-              {description}
-            </p>
+            <div className="text-[13px] opacity-75">{description}</div>
           )}
         </div>
 
-        {/* Action link */}
+        {/* Inline action link */}
         {action && (
           <button
             type="button"
@@ -191,27 +179,25 @@ const Toast = React.forwardRef<HTMLDivElement, ToastProps>(
             className={cn(
               "shrink-0 cursor-pointer whitespace-nowrap font-semibold text-[14px]",
               "transition-opacity duration-150 hover:opacity-70",
-              "focus-visible:outline-none focus-visible:underline",
-              variant === "default"
-                ? "text-[#ccf8b9]"   // Gossip — Figma action colour
-                : "underline underline-offset-2"
+              "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-1",
+              cfg.actionClass
             )}
           >
             {action.label}
           </button>
         )}
 
-        {/* Dismiss */}
+        {/* Dismiss × */}
         {showDismiss && (
           <button
             type="button"
             onClick={onDismiss}
             aria-label="Dismiss notification"
             className={cn(
-              "shrink-0 cursor-pointer rounded-full p-[2px]",
-              "transition-opacity duration-150 hover:opacity-70",
-              "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-current focus-visible:ring-offset-1",
-              variant === "default" ? "text-white" : "opacity-60"
+              "shrink-0 cursor-pointer rounded-md p-[2px]",
+              "transition-opacity duration-150 hover:opacity-60",
+              "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-1",
+              cfg.textClass
             )}
           >
             <RiCloseLine className="size-[20px]" aria-hidden="true" />
@@ -223,4 +209,4 @@ const Toast = React.forwardRef<HTMLDivElement, ToastProps>(
 )
 Toast.displayName = "Toast"
 
-export { Toast, toastVariants }
+export { Toast }

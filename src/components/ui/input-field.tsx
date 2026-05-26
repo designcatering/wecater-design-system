@@ -98,8 +98,8 @@ export interface InputFieldProps extends Omit<InputProps, "type"> {
 // ─── Padding map ──────────────────────────────────────────────────────────────
 
 const PADDING: Record<InputFieldSize, string> = {
-  sm: "px-[12px] py-[10px]",   // Figma: --spacing/12, --spacing/10
-  md: "p-[12px]",              // Figma: --spacing/12 all sides
+  sm: "px-[16px] py-[10px]",   // 16px left/right, 10px top/bottom
+  md: "px-[16px] py-[12px]",   // 16px left/right, 12px top/bottom
 }
 
 // ─── Outer container class builder ───────────────────────────────────────────
@@ -119,7 +119,7 @@ function outerCn({
   containerClassName?: string
 }) {
   return cn(
-    "flex items-stretch w-full rounded-[6px]",
+    "flex items-stretch w-full rounded-full",
     // overflow-hidden clips inner panels to the outer radius for single-border types.
     // copy type owns its own child borders — do NOT clip or it masks the right panel.
     hasBorder && "overflow-hidden",
@@ -347,7 +347,7 @@ function InputField({
         {/* Left: input with 3-sided border */}
         <div className={cn(
           "flex flex-1 items-center min-w-0 z-[2]",
-          !ghost && ["bg-white", leftBorder, "rounded-l-[3px]"],
+          !ghost && ["bg-white", leftBorder, "rounded-l-full"],
           ghost && "bg-[--color-surface-subtle]",
           disabled && !ghost && "bg-[--color-surface-disabled] border-[--color-border-disabled]",
           padding
@@ -361,7 +361,7 @@ function InputField({
           disabled={disabled}
           className={cn(
             "flex items-center gap-[8px] shrink-0 z-[1]",
-            !ghost && ["bg-[--color-surface-subtle]", rightBorder, "rounded-r-[3px]"],
+            !ghost && ["bg-[--color-surface-subtle]", rightBorder, "rounded-r-full"],
             ghost && "bg-[--color-surface-subtle]",
             disabled && "cursor-not-allowed opacity-50",
             padding

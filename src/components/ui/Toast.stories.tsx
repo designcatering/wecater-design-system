@@ -15,7 +15,7 @@ import type { ToasterPosition } from "@/components/ui/toaster"
 // ─── Meta ─────────────────────────────────────────────────────────────────────
 
 const meta = {
-  title: "Primitives/Toast",
+  title: "Components/Toast",
   component: Toast,
   parameters: {
     layout: "centered",

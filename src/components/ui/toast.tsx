@@ -5,9 +5,9 @@
  *
  * ─── Variants ─────────────────────────────────────────────────────────────────
  * default  →  dark (#101828 Mirage/900) bg · white text · Gossip-green action
- * success  →  Salem/50 (#e6f5ed) bg · Salem/900 text · green icon
- * info     →  purple-50 bg · purple-900 text · info icon
- * warning  →  amber-50 bg · amber-900 text · warning icon
+ * success  →  Salem/50  (#e6f5ed) bg · Salem/300 border · Salem/900 text · Salem/700 icon
+ * info     →  Blush/100 (#fee3fc) bg · Blush/900 border · Blush/900 text · Blush/900 icon
+ * warning  →  Orange/100 (#ffe4cc) bg · Orange/700 border · Orange/900 text · Orange/700 icon
  * error    →  Error/Bg-subtle (#ffdcdc) bg · Error/Text-subtle text · error icon
  *
  * ─── Anatomy ──────────────────────────────────────────────────────────────────
@@ -79,30 +79,30 @@ const VARIANT_CONFIG: Record<
       boxShadow: "0 1px 2px rgba(16,24,40,.06)",
     },
     textClass:   "text-[#033f1c]",   // cater-salem-900
-    actionClass: "text-[#067e39] underline underline-offset-2",
+    actionClass: "text-[#067e39] ",
     iconClass:   "text-[#067e39]",   // cater-salem-700
     Icon: RiCheckboxCircleLine,
   },
   info: {
     containerStyle: {
-      backgroundColor: "#f3e8ff",
-      border: "1px solid #c084fc",
+      backgroundColor: "#fee3fc",    // cater-blush-100
+      border: "1px solid #8e2e84",   // cater-blush-900
       boxShadow: "0 1px 2px rgba(16,24,40,.06)",
     },
-    textClass:   "text-[#4a0080]",
-    actionClass: "text-[#7c3aed] underline underline-offset-2",
-    iconClass:   "text-[#7c3aed]",
+    textClass:   "text-[#8e2e84]",   // cater-blush-900
+    actionClass: "text-[#8e2e84] ",  // cater-blush-900
+    iconClass:   "text-[#8e2e84]",   // cater-blush-900
     Icon: RiInformationLine,
   },
   warning: {
     containerStyle: {
-      backgroundColor: "#fffbeb",
-      border: "1px solid #fcd34d",
+      backgroundColor: "#ffe4cc",    // cater-orange-100
+      border: "1px solid #ca6100",   // cater-orange-700
       boxShadow: "0 1px 2px rgba(16,24,40,.06)",
     },
-    textClass:   "text-[#78350f]",
-    actionClass: "text-[#d97706] underline underline-offset-2",
-    iconClass:   "text-[#d97706]",
+    textClass:   "text-[#653000]",   // cater-orange-900
+    actionClass: "text-[#ca6100] ",  // cater-orange-700
+    iconClass:   "text-[#ca6100]",   // cater-orange-700
     Icon: RiAlertLine,
   },
   error: {
@@ -112,7 +112,7 @@ const VARIANT_CONFIG: Record<
       boxShadow: "0 1px 2px rgba(16,24,40,.06)",
     },
     textClass:   "text-[#6b0100]",   // color-error-text-subtle
-    actionClass: "text-[#6b0100] underline underline-offset-2",
+    actionClass: "text-[#6b0100] ",
     iconClass:   "text-[#c22d2c]",
     Icon: RiErrorWarningLine,
   },

@@ -48,7 +48,7 @@ import { Input, type InputProps } from "@/components/ui/input"
 // ─── Types ────────────────────────────────────────────────────────────────────
 
 export type InputFieldType = "name" | "company" | "amount" | "date" | "copy"
-export type InputFieldSize = "sm" | "md"
+export type InputFieldSize = "xs" | "sm" | "md"
 
 export interface InputFieldProps extends Omit<InputProps, "type"> {
   // ── Content ──────────────────────────────────────────────────────────────
@@ -98,8 +98,9 @@ export interface InputFieldProps extends Omit<InputProps, "type"> {
 // ─── Padding map ──────────────────────────────────────────────────────────────
 
 const PADDING: Record<InputFieldSize, string> = {
-  sm: "px-[16px] py-[10px]",   // 16px left/right, 10px top/bottom
-  md: "px-[16px] py-[12px]",   // 16px left/right, 12px top/bottom
+  xs: "px-[12px] py-[7px]",    // 12px left/right, 7px top/bottom  → ≈ 36px tall (header search)
+  sm: "px-[16px] py-[10px]",   // 16px left/right, 10px top/bottom → ≈ 44px tall
+  md: "px-[16px] py-[12px]",   // 16px left/right, 12px top/bottom → ≈ 48px tall
 }
 
 // ─── Outer container class builder ───────────────────────────────────────────
